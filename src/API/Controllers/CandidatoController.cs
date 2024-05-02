@@ -70,7 +70,7 @@ namespace API.Controllers;
             _UnitOfWork.Candidatos!.Add(candidato);
             await _UnitOfWork.SaveAsync();
             var createdRecordDto = _Mapper.Map<CandidatoDto>(candidato);
-            return CreatedAtAction(nameof(Post), createdRecordDto);
+            return CreatedAtAction(nameof(Post), createdRecordDto, new { isSuccess = recordDto });
         }
 
         [HttpPut("{id}")]
@@ -83,7 +83,7 @@ namespace API.Controllers;
             var records = _Mapper.Map<Candidato>(recordDto);
             _UnitOfWork.Candidatos!.Update(records);
             await _UnitOfWork.SaveAsync();
-            return recordDto;
+            return StatusCode(StatusCodes.Status200OK, new { isSuccess = recordDto });
         }
 
         [HttpDelete("{id}")]
@@ -99,7 +99,7 @@ namespace API.Controllers;
                 }
                 _UnitOfWork.Candidatos.Remove(record);
                 await _UnitOfWork.SaveAsync();
-                return StatusCode(StatusCodes.Status200OK, "Se ha borrado exitosamente");
+                return StatusCode(StatusCodes.Status200OK, new { isSuccess = record });
             }
             catch (Exception)
             {
